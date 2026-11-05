@@ -1,0 +1,127 @@
+#
+# Copyright (C) 2026 The Android Open Source Project
+# Copyright (C) 2026 SebaUbuntu's TWRP device tree generator
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+DEVICE_PATH := device/ums312/H100
+
+# For building with minimal manifest
+ALLOW_MISSING_DEPENDENCIES := true
+
+# Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 := 
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := generic
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := generic
+
+# APEX
+OVERRIDE_TARGET_FLATTEN_APEX := true
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := H100
+TARGET_NO_BOOTLOADER := true
+
+# Display
+TARGET_SCREEN_DENSITY := 160
+
+# Kernel
+# Traditional Unisoc recovery image. These values are read directly from the
+# stock Android boot header rather than inferred from the unpacking tool.
+BOARD_BOOTIMG_HEADER_VERSION := 1
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_PAGESIZE := 2048
+BOARD_KERNEL_OFFSET := 0x00008000
+BOARD_SECOND_OFFSET := 0x00000000
+BOARD_RAMDISK_OFFSET := 0x05400000
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+# This is a standalone recovery.img, so its command line is not shared with
+# normal Android boot. Force permissive mode before first-stage init starts.
+BOARD_KERNEL_CMDLINE := console=ttyS1,115200n8 buildvariant=user androidboot.selinux=permissive
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
+BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
+BOARD_KERNEL_IMAGE_NAME := Image
+BOARD_KERNEL_SEPARATED_DTBO := true
+TARGET_KERNEL_CONFIG := H100_defconfig
+TARGET_KERNEL_SOURCE := kernel/ums312/H100
+
+# Kernel - prebuilt
+TARGET_FORCE_PREBUILT_KERNEL := true
+ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
+BOARD_KERNEL_SEPARATED_DTBO := 
+endif
+
+# Partitions
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+# A standalone recovery image does not reveal the boot partition capacity.
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := 41943040
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_DLKMIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_VENDOR := vendor
+
+# Platform
+TARGET_BOARD_PLATFORM := ums312
+BOARD_USES_SPRD_HARDWARE := true
+
+# Recovery
+BOARD_INCLUDE_RECOVERY_DTBO := true
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
+# Security patch level
+VENDOR_SECURITY_PATCH := 2021-08-01
+
+# Hack: prevent anti rollback
+PLATFORM_VERSION := 9
+PLATFORM_SECURITY_PATCH := 2019-09-05
+VENDOR_SECURITY_PATCH := 2019-09-05
+
+# TWRP Configuration
+TW_THEME := portrait_hdpi
+TW_EXTRA_LANGUAGES := true
+TW_SCREEN_BLANK_ON_BOOT := true
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_USE_TOOLBOX := true
+# Android 11 Unisoc traditional recovery has no usable keymaster/FBE service.
+TW_INCLUDE_CRYPTO := false
+TW_INCLUDE_CRYPTO_FBE := false
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
+TW_NO_HAPTICS := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_LIBRESETPROP := true
+TW_NO_FLASH_CURRENT_TWRP := true
+TW_NO_FASTBOOT_BOOT := true
+TARGET_EXCLUDE_BOOTCTRL := true
+TARGET_NO_UPDATE_ENGINE := true
+TARGET_NO_RECOVERY_UPDATE_ENGINE := true
+TARGET_BOOTCTRL_DISABLE := true
+TARGET_BOARD_PLATFORM_NO_BOOTCTRL := true
+USE_GENERIC_BOOTCTRL_HEADERS := true
+BOARD_BOOTCTRL_HEADER_VERSION := 0
+TW_DRM_LEGACY_MODESET := true
