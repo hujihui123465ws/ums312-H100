@@ -14,7 +14,7 @@ $(call inherit-product-if-exists, vendor/twrp/config/common.mk)
 $(call inherit-product, device/ums312/H100/device.mk)
 
 PRODUCT_DEVICE := H100
-PRODUCT_NAME := twrp_H100
+PRODUCT_NAME := omni_H100
 PRODUCT_BRAND := EEBBK
 PRODUCT_MODEL := S1W
 PRODUCT_MANUFACTURER := ums312
